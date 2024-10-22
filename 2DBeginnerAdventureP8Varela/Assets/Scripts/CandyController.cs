@@ -14,10 +14,12 @@ public class CandyController : MonoBehaviour
     void Update()
     {
         float horizontal = Input.GetAxis("Horizontal");
-        Debug.Log(horizontal);
+        float vertical = Input.GetAxis("Vertical");
+
 
         Vector2 position = transform.position;
-        position.x = position.x + 0.1f * horizontal;
+        position.x = position.x + 5.0f * horizontal * Time.deltaTime;
+        position.y = position.y + 5.0f * vertical * Time.deltaTime;
         transform.position = position;
     }
 }
