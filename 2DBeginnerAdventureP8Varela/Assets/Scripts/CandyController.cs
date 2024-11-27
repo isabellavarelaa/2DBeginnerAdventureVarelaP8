@@ -11,7 +11,7 @@ public class CandyController : MonoBehaviour
     public GameObject projectilePrefab;
 
     public float timeInvincible = 2.0f;
- public int health { get { return currentHealth; } }
+    public int health { get { return currentHealth; } }
     int currentHealth;
 
     bool isInvincible;
@@ -25,6 +25,8 @@ public class CandyController : MonoBehaviour
     Vector2 lookDirection = new Vector2(1, 0);
 
     AudioSource audioSource;
+    public AudioClip throwSound;
+    public AudioClip hitSound;
     // Start is called before the first frame update
     void Start()
     {
@@ -90,20 +92,23 @@ public class CandyController : MonoBehaviour
 
     public void ChangeHealth(int amount)
     {
-        if (amount < 0)
+        if(amount < 0)
         {
             animator.SetTrigger("Hit");
-            if (!isInvincible)
+
+            if(isInvincible)
             {
                 return;
             }
             isInvincible = true;
             invincibleTimer = timeInvincible;
+            PlaySound(hitSound);
         }
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
-        UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+        UIHealthBar.instance.SetValue(currentHealth/(float)maxHealth);
 
     }
+
     void Launch()
     {
         GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
@@ -112,13 +117,13 @@ public class CandyController : MonoBehaviour
         projectile.Launch(lookDirection, 300);
 
         animator.SetTrigger("Launch");
-        {
-             void PlaySound(AudioClip clip)
+        PlaySound(throwSound);
+    }
+              public void PlaySound(AudioClip clip)
             { 
                 audioSource.PlayOneShot(clip);
             }
 
         }
-    }
-}        
+          
     
